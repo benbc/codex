@@ -32,3 +32,8 @@ main = do print (nextGen neighbourless Alive)
           print (nextGen threeNeighboured Dead)
           print (nextGen twoNeighboured Alive)
           print (nextGen twoNeighboured Dead)
+
+-- TOOD
+-- * try refactoring to make Neighbourhood a type class
+-- * can you do tell-don't-ask in FP?
+--   (e.g. pass Neighbourhood a function which it calls with numAlive)
