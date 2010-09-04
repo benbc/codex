@@ -1,0 +1,29 @@
+?-*- mode: org; -*-
+
+* intro
+** what is tdd?
+*** development structured as a series of *small* steps, each one guided by a test
+*** tests are *unit* tests; each one tests a single, small unit of code in isolation
+*** design by wishful thinking
+**** want to implement units without having to define the implementation of their collaborators
+**** this is the fundamental insight of the mockists
+**** the interface to a unit is sketched out by implication of the tests of its collaborators
+** different languages -- different abstraction mechanisms
+*** in each language the natural unit differs, depending on the chief abstraction mechanism
+*** examples
+**** java - classes/interfaces
+**** ruby - messages/objects
+**** common lisp - generic functions
+**** clojure - functions and environments(/bindings/whatever?)
+**** haskell - types
+**** erlang - processes
+** common code example
+*** game of life extract?
+* languages
+** java
+** ruby
+** common lisp
+** clojure
+** haskell
+** erlang
+** gilad bracha's language?
