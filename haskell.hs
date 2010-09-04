@@ -8,8 +8,8 @@ type Neighbourhood = [Cell]
 numberAliveIn :: Neighbourhood -> Int
 numberAliveIn = length . (filter alive)
 
-nextState :: Grid a => a -> Cell -> Cell
-nextState g c = f c
+nextGen :: Grid a => a -> Cell -> Cell
+nextGen g c = f c
     where numAlive = numberAliveIn (neighbours g c)
           f _ | numAlive <  2 = Dead
           f c | numAlive == 2 = c
@@ -26,9 +26,9 @@ neighbourless = CannedGrid []
 twoNeighboured = CannedGrid (replicate 2 Alive)
 threeNeighboured = CannedGrid (replicate 3 Alive)
 
-main = do print (nextState neighbourless Alive)
-          print (nextState neighbourless Dead)
-          print (nextState threeNeighboured Alive)
-          print (nextState threeNeighboured Dead)
-          print (nextState twoNeighboured Alive)
-          print (nextState twoNeighboured Dead)
+main = do print (nextGen neighbourless Alive)
+          print (nextGen neighbourless Dead)
+          print (nextGen threeNeighboured Alive)
+          print (nextGen threeNeighboured Dead)
+          print (nextGen twoNeighboured Alive)
+          print (nextGen twoNeighboured Dead)
