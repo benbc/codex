@@ -24,23 +24,26 @@ class Grid g where
 data CannedGrid = CannedGrid Neighbourhood
 instance Grid CannedGrid where
     neighbours (CannedGrid ns) _ = ns
-neighbourless = CannedGrid []
-twoNeighboured = CannedGrid (replicate 2 Alive)
-threeNeighboured = CannedGrid (replicate 3 Alive)
-fourNeighboured = CannedGrid (replicate 4 Alive)
 
-infix 1 `shouldBecome`
-shouldBecome :: Grid g => (g, Cell) -> Cell -> Test
-(grid, cell) `shouldBecome` result = (nextGen grid cell) ~?= result
+noNeighbours = CannedGrid []
+twoNeigbours = CannedGrid (replicate 2 Alive)
+threeNeigbours = CannedGrid (replicate 3 Alive)
+fourNeigbours = CannedGrid (replicate 4 Alive)
 
-tests = test [ (neighbourless, Alive) `shouldBecome` Dead
-             , (neighbourless, Dead)  `shouldBecome` Dead
-             , (twoNeighboured, Alive) `shouldBecome` Alive
-             , (twoNeighboured, Dead)  `shouldBecome` Dead
-             , (threeNeighboured, Alive) `shouldBecome` Alive
-             , (threeNeighboured, Dead)  `shouldBecome` Alive
-             , (fourNeighboured, Alive) `shouldBecome` Dead
-             , (fourNeighboured, Dead) `shouldBecome` Dead
+infix 1 `becomes`
+becomes = (~?=)
+
+infix 2 `with`
+cell `with` grid = (nextGen grid cell)
+
+tests = test [ Alive `with` noNeighbours `becomes` Dead
+             , Dead `with` noNeighbours  `becomes` Dead
+             , Alive `with` twoNeigbours `becomes` Alive
+             , Dead `with` twoNeigbours  `becomes` Dead
+             , Alive `with` threeNeigbours `becomes` Alive
+             , Dead `with` threeNeigbours  `becomes` Alive
+             , Alive `with` fourNeigbours `becomes` Dead
+             , Dead `with` fourNeigbours `becomes` Dead
              ]
 
 main = runTestTT tests
