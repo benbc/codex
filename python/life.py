@@ -10,17 +10,17 @@ class Cell:
 
 class Alive(Cell):
     def next_gen(self):
-        if self._num_living_neighbours() in [2, 3]:
-            return Alive(self.grid)
-        return Dead(self.grid)
+        if self._num_living_neighbours() not in [2, 3]:
+            self.__class__ = Dead
+        return self
     def is_alive(self):
         return True
 
 class Dead(Cell):
     def next_gen(self):
         if self._num_living_neighbours() == 3:
-            return Alive(self.grid)
-        return Dead(self.grid)
+            self.__class__ = Alive
+        return self
     def is_alive(self):
         return False
 
