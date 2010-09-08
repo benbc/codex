@@ -25,7 +25,7 @@ class Dead(Cell):
 def with_neighbours(num):
     class StubGrid:
         def neighbours(self, cell):
-            return [Alive(self) for n in range(0, num)]
+            return [Alive(self) for n in range(0, num)] + [Dead(self) for n in range(0, 8-num)]
     return StubGrid()
 
 def make_test(num_alive, start, expected):
