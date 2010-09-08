@@ -1,28 +1,26 @@
-class Alive:
+class Cell:
     def __init__(self, grid):
         self.grid = grid
+    def is_dead(self):
+        return not self.is_alive()
+    def _num_living_neighbours(self):
+        return len(filter(lambda n: n.is_alive(), self._neighbours()))
+    def _neighbours(self):
+        return self.grid.neighbours(self)
+
+class Alive(Cell):
     def next_gen(self):
         if self._num_living_neighbours() == 2:
             return Alive(self.grid)
         return Dead(self.grid)
     def is_alive(self):
         return True
-    def is_dead(self):
-        return False
-    def _num_living_neighbours(self):
-        return len(filter(lambda n: n.is_alive(), self._neighbours()))
-    def _neighbours(self):
-        return self.grid.neighbours(self)
 
-class Dead:
-    def __init__(self, grid):
-        self.grid = grid
+class Dead(Cell):
     def next_gen(self):
         return Dead(self.grid)
     def is_alive(self):
         return False
-    def is_dead(self):
-        return True
 
 def with_neighbours(num):
     class StubGrid:
