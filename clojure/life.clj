@@ -18,30 +18,24 @@
 
 (deftest succession
   (let [alive-neighbours (fn [num] (concat (replicate num (alive))
-                                           (replicate (- 8 num) (dead))))]
-    (testing "no neighbours"
-      (binding [neighbours (fn [_] (alive-neighbours 0))]
-        (is (dead? (next-gen nil (dead))))
-        (is (dead? (next-gen nil (alive))))))
-    (testing "one neighbour"
-      (binding [neighbours (fn [_] (alive-neighbours 1))]
-        (is (dead? (next-gen nil (dead))))
-        (is (dead? (next-gen nil (alive))))))
-    (testing "two neighbours"
-      (binding [neighbours (fn [_] (alive-neighbours 2))]
-        (is (dead? (next-gen nil (dead))))
-        (is (alive? (next-gen nil (alive))))))
-    (testing "three neighbours"
-      (binding [neighbours (fn [_] (alive-neighbours 3))]
-        (is (alive? (next-gen nil (dead))))
-        (is (alive? (next-gen nil (alive))))))
-    (testing "four neighbours"
-      (binding [neighbours (fn [_] (alive-neighbours 4))]
-        (is (dead? (next-gen nil (dead))))
-        (is (dead? (next-gen nil (alive))))))
-    (testing "five neighbours"
-      (binding [neighbours (fn [_] (alive-neighbours 5))]
-        (is (dead? (next-gen nil (dead))))
-        (is (dead? (next-gen nil (alive))))))))
+                                           (replicate (- 8 num) (dead))))
+        make-test (fn [[num-alive start expected]]
+                    (binding [neighbours (fn [_] (alive-neighbours num-alive))]
+                      (is (expected (next-gen nil start)))))]
+    (doseq [spec [[0 (dead)  dead?]
+                  [0 (alive) dead?]
+                  [1 (dead)  dead?]
+                  [1 (alive) dead?]
+                  [2 (dead)  dead?]
+                  [2 (alive) alive?]
+                  [3 (dead)  alive?]
+                  [3 (alive) alive?]
+                  [4 (dead)  dead?]
+                  [4 (alive) dead?]
+                  [5 (dead)  dead?]
+                  [5 (alive) dead?]
+                  [8 (dead)  dead?]
+                  [8 (alive) dead?]]]
+      (make-test spec))))
 
 (run-tests)
