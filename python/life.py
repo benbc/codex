@@ -10,7 +10,7 @@ class Cell:
 
 class Alive(Cell):
     def next_gen(self):
-        if self._num_living_neighbours() == 2:
+        if self._num_living_neighbours() in [2, 3]:
             return Alive(self.grid)
         return Dead(self.grid)
     def is_alive(self):
@@ -18,6 +18,8 @@ class Alive(Cell):
 
 class Dead(Cell):
     def next_gen(self):
+        if self._num_living_neighbours() == 3:
+            return Alive(self.grid)
         return Dead(self.grid)
     def is_alive(self):
         return False
@@ -41,4 +43,11 @@ def make_test(num_alive, start, expected):
                                [1, Dead,  'is_dead'],
                                [2, Alive, 'is_alive'],
                                [2, Dead,  'is_dead'],
-                               ]]
+                               [3, Alive, 'is_alive'],
+                               [3, Dead,  'is_alive'],
+                               [4, Alive, 'is_dead'],
+                               [4, Dead,  'is_dead'],
+                               [5, Alive, 'is_dead'],
+                               [5, Dead,  'is_dead'],
+                               [8, Alive, 'is_dead'],
+                               [8, Dead,  'is_dead']]]
