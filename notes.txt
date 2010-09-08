@@ -26,4 +26,4 @@
 ** clojure
 ** haskell
 ** erlang
-** gilad bracha's language?
+** Newspeak
