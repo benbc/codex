@@ -30,6 +30,9 @@ def with_neighbours(num):
             return [Alive(self) for n in range(0, num)] + [Dead(self) for n in range(0, 8-num)]
     return StubGrid()
 
+def test_dies_with_no_neighbours():
+    assert Alive(with_neighbours(0)).next_gen().is_dead()
+
 def make_test(num_alive, start, expected):
     name = 'test_%s_with_%s_neighbours_%s' % (start.__name__, num_alive, expected)
     def test():
