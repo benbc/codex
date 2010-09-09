@@ -36,7 +36,8 @@ becomes = (~?=)
 infix 2 `with`
 cell `with` grid = (nextGen grid cell)
 
-tests = test [ Alive `with` noNeighbours `becomes` Dead
+tests = test [ (nextGen noNeighbours Alive) ~?= Dead
+             , Alive `with` noNeighbours `becomes` Dead
              , Dead `with` noNeighbours  `becomes` Dead
              , Alive `with` twoNeigbours `becomes` Alive
              , Dead `with` twoNeigbours  `becomes` Dead
