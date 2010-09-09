@@ -1,15 +1,47 @@
 ?-*- mode: org; -*-
 
+Colour scheme for projection (High Contrast) (Billw, Dark Laptop, Euphoria, Hober, Lethe, Taming Mr Arneson, TTY dark)
+
 * intro
 ** what is tdd?
 *** development structured as a series of *small* steps, each one guided by a test
 *** tests are *unit* tests; each one tests a single, small unit of code in isolation
-*** design by wishful thinking
+*** design by wishful thinking/outside-in development
 **** want to implement units without having to define the implementation of their collaborators
 **** this is the fundamental insight of the mockists
 **** the interface to a unit is sketched out by implication of the tests of its collaborators
-** different languages -- different abstraction mechanisms
-*** in each language the natural unit differs, depending on the chief abstraction mechanism
+** what are the implications of this?
+If we want to develop (and test) a unit of computation in isolation
+then we need to be able to execute it. Each unit has certain services
+which are provided by its collaborators; but we don't want to concern
+ourselves with the implementation of these collaborators. This means
+that, under test, the unit needs to have those services provided by
+alternative collaborators which have trivial implementations that can
+be easily controlled in the tests to give the behaviour that we need.
+
+Of course when the unit is executed in the full application, it will
+have move sophisticated collaborators, each of which has been
+independently developed using a similar mechanism.
+
+This introduces the key requirement for TDD: substitutability. You
+need to be able to substitute at runtime the collaborators that
+provide services to a unit of computation.
+
+In practice this means that we need some way of controlling the
+dispatch of the communication between the units. Note that this
+concept of "dispatch" is broader than just method/function dispatching
+that we are used to from OO languages.
+** different languages
+*** different paradigms, different abstraction mechanisms
+depending on the language, the nature of the units, the communication
+between them and the dispatching mechanism we use to provide
+substitutability will differ
+
+In working out how to do TDD in a new language, we need to look for
+the seams in the language. This is not just a question of identifying
+the abstraction mechanism ("it's a functional language, we shall use
+functions!"), but also working out what dispatching mechanisms we can
+use to allow substitutability.
 *** examples
 **** java - classes/interfaces
 **** ruby - messages/objects
@@ -17,13 +49,10 @@
 **** clojure - functions and environments(/bindings/whatever?)
 **** haskell - types
 **** erlang - processes
-** common code example
-*** game of life extract?
-* languages
-** java
-** ruby
-** common lisp
+**** c - ??? (objects/headers)
+* practical examples
+** example domain
+** python
 ** clojure
 ** haskell
 ** erlang
-** Newspeak
