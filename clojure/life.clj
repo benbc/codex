@@ -16,10 +16,15 @@
         (= num-alive 3) (alive)
         :else (dead))))
 
+(defn alive-neighbours [num]
+  (concat (replicate num (alive)) (replicate (- 8 num) (dead))))
+
+(deftest dies-with-no-neighbours
+  (binding [neighbours (fn [_] (alive-neighbours 0))]
+    (is (dead? (next-gen nil (alive))))))
+
 (deftest succession
-  (let [alive-neighbours (fn [num] (concat (replicate num (alive))
-                                           (replicate (- 8 num) (dead))))
-        make-test (fn [[num-alive start expected]]
+  (let [make-test (fn [[num-alive start expected]]
                     (binding [neighbours (fn [_] (alive-neighbours num-alive))]
                       (is (expected (next-gen nil start)))))]
     (doseq [spec [[0 (dead)  dead?]
