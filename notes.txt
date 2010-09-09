@@ -55,4 +55,4 @@ use to allow substitutability.
 ** python
 ** clojure
 ** haskell
-** erlang
+** erlang (description)
