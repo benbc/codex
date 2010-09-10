@@ -2,6 +2,15 @@
 
 Colour scheme for projection (High Contrast) (Billw, Dark Laptop, Euphoria, Hober, Lethe, Taming Mr Arneson, TTY dark)
 
+work in progress
+tdd defn
+design by wishful thinking
+network of units
+collaborator-independence
+substitutability
+dispatch
+different languages: seams, dispatching mechanisms
+
 * intro
 ** what is tdd?
 *** development structured as a series of *small* steps, each one guided by a test
