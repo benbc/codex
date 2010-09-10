@@ -1,55 +1,63 @@
-{-# LANGUAGE EmptyDataDecls #-}
+import Test.HUnit hiding (State)
 
-import Test.HUnit
+data State = Alive | Dead deriving (Eq)
+data Cell = Cell State Position
 
-data Cell = Alive | Dead deriving (Show, Eq)
+alive, dead :: Cell -> Bool
+alive (Cell Alive _) = True
+alive (Cell Dead _) = False
+dead = not . alive
 
-alive :: Cell -> Bool
-alive Alive = True
-alive Dead = False
-
-data Grid
-type Neighbours = Grid -> Cell -> [Cell]
+data Position = Position
+data Grid = Grid
+type Neighbours = Grid -> Position -> [Cell]
 neighbours :: Neighbours
 neighbours = undefined
 
 type NextGen = Grid -> Cell -> Cell
-nextGen :: NextGen
-nextGen = generalNextGen neighbours
 
 generalNextGen :: Neighbours -> NextGen
-generalNextGen neighbours g c | numAlive <  2 = Dead
-                              | numAlive == 2 = c
-                              | numAlive == 3 = Alive
-                              | numAlive >  3 = Dead
-    where numAlive = numberAliveIn (neighbours g c)
+generalNextGen neighbours grid (Cell state position) = Cell state' position
+    where state' | numAlive <  2 = Dead
+                 | numAlive == 2 = state
+                 | numAlive == 3 = Alive
+                 | numAlive >  3 = Dead
+          numAlive = numberAliveIn (neighbours grid position)
           numberAliveIn = length . (filter alive)
+
+nextGen :: NextGen
+nextGen = generalNextGen neighbours
 
 {- TESTS -}
 
 cannedNeighbourNextGen :: [Cell] -> NextGen
 cannedNeighbourNextGen neighbours = generalNextGen (\ _ _ -> neighbours)
 
-noNeighbours = []
-twoNeigbours = replicate 2 Alive
-threeNeigbours = replicate 3 Alive
-fourNeigbours = replicate 4 Alive
+anAlive = Cell Alive undefined
+aDead = Cell Dead undefined
 
-test1 = "no neighbours dies" ~: Dead ~=? cannedNeighbourNextGen noNeighbours undefined Alive
+noNeighbours = []
+twoNeigbours = replicate 2 anAlive
+threeNeigbours = replicate 3 anAlive
+fourNeigbours = replicate 4 anAlive
+
+test1 = dead successor ~? "dies with no neighbours"
+    where successor = ourNextGen undefined anAlive
+          ourNextGen = cannedNeighbourNextGen noNeighbours
 
 infix 1 `becomes`
-becomes = (~?=)
+becomes cell pred = pred cell ~? ""
 infix 2 `with`
 cell `with` neighbours = cannedNeighbourNextGen neighbours undefined cell
 
-tests = [ Alive `with` noNeighbours `becomes` Dead
-        , Dead `with` noNeighbours  `becomes` Dead
-        , Alive `with` twoNeigbours `becomes` Alive
-        , Dead `with` twoNeigbours  `becomes` Dead
-        , Alive `with` threeNeigbours `becomes` Alive
-        , Dead `with` threeNeigbours  `becomes` Alive
-        , Alive `with` fourNeigbours `becomes` Dead
-        , Dead `with` fourNeigbours `becomes` Dead
+tests = [ anAlive `with` noNeighbours `becomes` dead
+        , aDead `with` noNeighbours  `becomes` dead
+        , anAlive `with` twoNeigbours `becomes` alive
+        , aDead `with` twoNeigbours  `becomes` dead
+        , anAlive `with` threeNeigbours `becomes` alive
+        , aDead `with` threeNeigbours  `becomes` alive
+        , anAlive `with` fourNeigbours `becomes` dead
+        , aDead `with` fourNeigbours `becomes` dead
         ]
 
 run = runTestTT $ test (test1:tests)
