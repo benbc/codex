@@ -1,18 +1,18 @@
 class Cell:
     def __init__(self, grid, position):
-        self.grid = grid
+        self._grid = grid
         self._position = position
     def is_dead(self):
         return not self.is_alive()
     def _num_living_neighbours(self):
         return len(filter(lambda n: n.is_alive(), self._neighbours()))
     def _neighbours(self):
-        return self.grid.neighbours(self)
+        return self._grid.neighbours(self)
 
 class Alive(Cell):
     def next_gen(self):
         if self._num_living_neighbours() not in [2, 3]:
-            self.__class__ = Dead
+            return Dead(self._grid, self._position)
         return self
     def is_alive(self):
         return True
@@ -20,7 +20,7 @@ class Alive(Cell):
 class Dead(Cell):
     def next_gen(self):
         if self._num_living_neighbours() == 3:
-            self.__class__ = Alive
+            return Alive(self._grid, self._position)
         return self
     def is_alive(self):
         return False
